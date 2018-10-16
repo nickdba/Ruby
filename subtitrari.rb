@@ -1,31 +1,41 @@
-path = Dir.pwd+"/*"
-vid_files = Dir["#{path}.avi", "#{path}.mpg", "#{path}.mkv"].sort
-sub_files = Dir["#{path}.srt", "#{path}.sub", "#{path}.txt"].sort
-
+# Print side by side
 def print_side_by_side(vids, subs)
-  for i in (1..vids.size) do puts "#{vids[i]} \t\t #{subs[i]}" end
-end
-
-# Replace romanian chars with english onces
-def replace_rom_chars(subs)
-  subs.each do |sub|
-    new_sub_text = File.read(sub).gsub("aa","t").gsub("bb","s").gsub("cc","s")
-    File.open(sub, "w") {|file| file.puts new_sub_text }
+  for i in (0..vids.size-1) do 
+    printf "%-60s %-60s\n", File.basename(vids[i]), File.basename(subs[i])
   end
 end
 
 # Mach subtitles names with video file names
 def match_names(vids,subs)
-  sub_files.each_with_index do |sub,i| 
-    new_sub = vid_files[i] 
-    newsub[-3,3] = sub[-3,3])
+  for i in (0..vids.size-1) do 
+    vid = vids[i]; subt = subs[i] 
+    File.rename(subt, vid.sub(/\.[^.]+\z/,subt[-4,4]))
   end
 end
 
-#file_names.each do |file_name|
-#  text = File.read(file_name)
-#  new_contents = text.gsub(/search_regexp/, "replacement string")
-#
-#  # To write changes to the file, use:
-#  File.open(file_name, "w") {|file| file.puts new_contents }
-#end
+# Replace romanian chars with english onces
+def replace_rom_chars(subs)
+  subs.each do |subt|
+    new_sub_text = File.read(subt).gsub("þ","t").gsub("º","s").gsub("ª","s")
+    File.open(subt, "w") {|file| file.puts new_sub_text }
+  end
+end
+
+path = Dir.pwd+"/*"
+
+begin
+  vid_files = Dir["#{path}.avi", "#{path}.mpg", "#{path}.mkv"].sort
+  sub_files = Dir["#{path}.srt", "#{path}.sub", "#{path}.txt"].sort
+  
+  # Print Menu
+  printf("\n1. Print Side by Side\n2. Match Names\n3. Replace Romanian Chars\n0. Exit\n\n")
+  gets opt
+
+  case opt
+    when 0; break
+    when 1; print_side_by_side(vid_files, sub_files)
+    when 2; match_names(vid_files, sub_files)
+    when 3; replace_rom_chars(sub_files)
+    else next
+  end         
+end until opt==0
