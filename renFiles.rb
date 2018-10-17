@@ -1,16 +1,18 @@
 files = Dir["./*.*"]
-
 puts files
-print "/Reg Exp/:"
-reg = gets
+print "Reg Exp:"
+reg = gets; reg = Regexp.new reg.chomp
 print "String:"
-str = gets
+str = (gets).chomp
+
+puts reg
 
 files.each do |file| 
-  newfile = file.sub("/\.balarii/", ".x265")   #(reg, str)
+  newfile = file.sub(reg, str)
   File.rename(file, newfile)
 end
 
-system ("clear")
+system("clear")
+files = Dir["./*.*"]
 puts files
 
