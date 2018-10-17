@@ -9,8 +9,8 @@ Commands need to be on separate lines or divided with `;`
 `gets`,`puts` and `print` commands interact with the user
 
 ```ruby
-gets a
-puts a; print a
+a = gets
+puts a; printf("%10s", a)
 ```
 
 ## Variables
@@ -247,4 +247,10 @@ Array of chars.
 "Nick"["ck"]   # => ck, substring exists
 "Nick"["La"]   # => nil, substring does not exist
 "ha "*3        # => ha ha ha
+```
+
+Some interesting functions.
+
+```ruby
+"Text to replace.".sub(/[^\s]+\s[^\s]+$/, "replaced.") # => Text replaced. /regular expressions/
 ```
